@@ -1,17 +1,23 @@
 const fs = require('fs');
 const path = require('path');
 
-const caminho = path.join(__dirname, 'dados.txt');
+const directory = path.join(__dirname, 'dados.txt')
 
-function getFileData(filePath) {
-  return new Promise((resolve) => {
-    const data = fs.readFileSync(filePath);
-    resolve(data);
-  });
+const getFileData = (directory) => {
+  return new Promise((resolve, reject) => {
+    const data = fs.readFile(directory)
+    resolve(data)
+  })
 }
 
-function fileDataToString(fileData) {
-  return String(fileData);
+getFileData(directory).then(data => console.log(data.toString()))
+
+/* const double = (value) => {
+  return new Promise((resolve, reject) => {
+    resolve(2 * a)
+  })
 }
 
-getFileData(caminho).then(fileDataToString).then(console.log);
+double(4)
+  .then(res => console.log(res))
+  .catch(err => console.log('Deu erro!')) */

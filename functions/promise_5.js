@@ -1,6 +1,7 @@
-function funcionarOuNao(valor, chanceErro) {
+function runOrNot(valor, errorChance) {
   return new Promise((resolve, reject) => {
-    if (Math.random() < chanceErro) {
+    consif
+    if (Math.random() < errorChance) {
       reject('Ocorreu um erro.');
     } else {
       resolve(valor);
@@ -8,4 +9,6 @@ function funcionarOuNao(valor, chanceErro) {
   });
 }
 
-funcionarOuNao('Testando...', 0.9).then(console.log).catch(console.error);
+runOrNot('Testando...', 0.9)
+  .then(res => console.log(res), (err) => console.log(`Ops => ${err}`))
+  .catch(err => console.error(err));
