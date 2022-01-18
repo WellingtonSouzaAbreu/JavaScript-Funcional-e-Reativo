@@ -8,7 +8,7 @@
 
 let numberOfExecutions = 0
 
-// Função pura!
+// Função impura!
 function sum(a, b) {
     numberOfExecutions++ // Efeito colateral observável - altera parâmetros fora do escopo
     return a + b
