@@ -1,14 +1,15 @@
 const fs = require('fs')
+const { Observable } = require('rxjs')
 
 function readDirectory(folderPath) {
-    return new Promise((resolve, reject) => {
+    return new Observable(subscriber => {
         try {
-            const files = fs.readdirSync(folderPath).map(file => {
-                return `${folderPath}/${file}`
+            fs.readdirSync(folderPath).forEach(file => {
+                subscriber.next(`${folderPath}/${file}`)
             })
-            resolve(files)
+            subscriber.complete()
         } catch (err) {
-            reject(err)
+            subscriber.error(err)
         }
     })
 }
@@ -29,10 +30,21 @@ function readFile(filePath) {
     })
 }
 
-function elementsEndingWith(textualPattern) {
+
+/* function elementsEndingWith(textualPattern) {
     return filePaths => {
         return filePaths.filter(filePath => filePath.endsWith(textualPattern))
     }
+} */
+
+function elementsEndingWith(textualPattern) {
+    return createPipeableOperator(subscriber => ({
+        next(text){
+            if(text.endsWith(textualPattern)){
+                subscriber.next(text)
+            }
+        }
+    }))
 }
 
 function mergeContents(filesContents) {
@@ -98,6 +110,19 @@ function writeInFile(folderPath) {
     return function (mostUsedWords) {
         fs.writeFileSync(`${folderPath}/mostUserWords.json`, JSON.stringify(mostUsedWords))
         return mostUsedWords
+    }
+}
+
+function createPipeableOperator(operatorFunction) {
+    return function (source) {
+        return Observable.create(subscriber => {
+            const sub = operatorFunction(subscriber)
+            source.subscribe({
+                next: sub.next,
+                error: sub.error || (err => subscriber.error(err)),
+                complete: sub.complete || (_ => subscriber.complete())
+            })
+        })
     }
 }
 

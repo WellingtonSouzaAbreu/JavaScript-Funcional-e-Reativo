@@ -9,6 +9,12 @@ const symbols = [
 const folderPath = `${__dirname}/data`
 
 fn.readDirectory(folderPath)
+    .pipe(
+        fn.elementsEndingWith('.srt')
+    )
+    .subscribe(console.log)
+
+/* fn.readDirectory(folderPath)
     .then(fn.elementsEndingWith('.srt'))
     .then(fn.readFiles)
     .then(fn.mergeContents)
@@ -24,5 +30,5 @@ fn.readDirectory(folderPath)
     .then(fn.groupWords)
     .then(fn.sortForNumericAttribute('qtde',' desc'))
     .then(fn.writeInFile(folderPath))
-    .then(console.log)
+    .then(console.log) */
     
