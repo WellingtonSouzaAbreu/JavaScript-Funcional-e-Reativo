@@ -1,11 +1,11 @@
 const fn = require('./functions.js')
-const {first, toArray, map} = require('rxjs/operators')
+const {first, toArray, map, groupBy, mergeMap, reduce} = require('rxjs/operators')
 const _ = require('lodash')
 
 const symbols = [
     '.', '?', '-', ',', '"', '♪',
     '_', '<i>', '</i>', '\r', '[', ']',
-    '(', ')', '!'
+    '(', ')', 
 ]
 
 const folderPath = `${__dirname}/data`
@@ -16,18 +16,24 @@ fn.readDirectory(folderPath)
         fn.readFile(),
         fn.separateFor('\n'),
         fn.removeEmptyRows(),
-        fn.removeRowIfInclude('-->'),
-        fn.removeRowIfInclude('font'),
-        fn.removeRowIfInclude('color'),
         fn.removeRowsWithOnlyNumbers(),
+        fn.removeRowIfInclude('-->'),
         fn.removeSymbols(symbols),
         fn.separateFor(' '),
-        fn.removeRowsWithOnlyNumbers(),
         fn.removeEmptyRows(),
+        fn.removeRowsWithOnlyNumbers(),
+
+        // toArray(),
+        // fn.groupWords(),
+        
+        groupBy(el => el),
+        mergeMap(group => group.pipe(toArray())), // Reduce do rxjs
+        map(groupedWords => ({element: groupedWords[0], qtde: groupedWords.length})),
         toArray(),
-        fn.groupWords(),
+
         map(array => _.sortBy(array, el => -el.qtde)),
-        fn.writeInFile(folderPath)
+
+        // fn.writeInFile(folderPath)
     )
     .subscribe(console.log)
 

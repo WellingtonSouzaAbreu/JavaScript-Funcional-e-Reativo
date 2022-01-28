@@ -3,7 +3,7 @@ const fn = require('./functions.js')
 const symbols = [
     '.', '?', '-', ',', '"', '♪',
     '_', '<i>', '</i>', '\r', '[', ']',
-    '(', ')'
+    '(', ')', '!'
 ]
 
 const folderPath = `${__dirname}/data`
