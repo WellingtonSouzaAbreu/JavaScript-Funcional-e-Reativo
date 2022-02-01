@@ -26,12 +26,12 @@ fn.readDirectory(folderPath)
         // toArray(),
         // fn.groupWords(),
         
-        groupBy(el => el),
-        mergeMap(group => group.pipe(toArray())), // Reduce do rxjs
-        map(groupedWords => ({element: groupedWords[0], qtde: groupedWords.length})),
-        toArray(),
+        groupBy(el => el), // Agrupa elementos semelhantes, cada um em um array
+        mergeMap(group => group.pipe(toArray())), // Agrupa todos os arrays em um
+        // map(groupedWords => ({element: groupedWords[0], qtde: groupedWords.length})),
+        // toArray(),
 
-        map(array => _.sortBy(array, el => -el.qtde)),
+        // map(array => _.sortBy(array, el => -el.qtde)),
 
         // fn.writeInFile(folderPath)
     )
